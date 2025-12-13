@@ -32,7 +32,7 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
         formattedPhone = `+91${formattedPhone}`
       }
 
-      // 2) Send OTP via Firebase (no backend)
+      // 2) Send OTP via Firebase (no backend
       await sendOtpToPhone(formattedPhone)
 
       // 3) Go to OTP page
