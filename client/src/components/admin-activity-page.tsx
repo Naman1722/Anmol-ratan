@@ -3,7 +3,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
+import { addAdminUser, addAdminBhajan } from "../api/api";
+
 const ADMIN_SECRET = import.meta.env.VITE_ADMIN_SECRET;
+
 
 export default function AdminActivityPage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -32,22 +35,14 @@ export default function AdminActivityPage() {
     const handleAddUser = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            const res = await fetch("/api/admin/users", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-admin-secret": password,
-                },
-                body: JSON.stringify({ username, phoneNumber: userPhone }),
-            })
-            const data = await res.json()
+            const res = await addAdminUser(username, userPhone, password);
 
             if (res.ok) {
                 setMessage({ text: "User whitelisted successfully!", type: "success" })
                 setUsername("")
                 setUserPhone("")
             } else {
-                setMessage({ text: data.message || "Failed to add user", type: "error" })
+                setMessage({ text: res.message || "Failed to add user", type: "error" })
             }
         } catch (err) {
             setMessage({ text: "Server error", type: "error" })
@@ -57,15 +52,7 @@ export default function AdminActivityPage() {
     const handleAddBhajan = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            const res = await fetch("/api/admin/bhajans", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-admin-secret": password,
-                },
-                body: JSON.stringify({ title, category, lyrics }),
-            })
-            const data = await res.json()
+            const res = await addAdminBhajan(title, category, lyrics, password);
 
             if (res.ok) {
                 setMessage({ text: "Bhajan added successfully!", type: "success" })
@@ -73,7 +60,7 @@ export default function AdminActivityPage() {
                 setLyrics("")
                 setCategory("Bhajan")
             } else {
-                setMessage({ text: data.message || "Failed to add bhajan", type: "error" })
+                setMessage({ text: res.message || "Failed to add bhajan", type: "error" })
             }
         } catch (err) {
             setMessage({ text: "Server error", type: "error" })

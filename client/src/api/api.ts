@@ -85,6 +85,8 @@ export interface Bhajan {
   createdAt: string;
 }
 
+// ... existing code ...
+
 export async function getBhajans(): Promise<{ ok: boolean; data: Bhajan[] }> {
   try {
     const res = await fetch(`${API}/bhajans`);
@@ -92,5 +94,50 @@ export async function getBhajans(): Promise<{ ok: boolean; data: Bhajan[] }> {
   } catch (err) {
     console.error("getBhajans error:", err);
     return { ok: false, data: [] };
+  }
+}
+
+// Admin API calls
+
+export async function addAdminUser(
+  username: string,
+  phoneNumber: string,
+  secret: string
+): Promise<{ ok: boolean; message?: string }> {
+  try {
+    const res = await fetch(`${API}/admin/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-secret": secret,
+      },
+      body: JSON.stringify({ username, phoneNumber }),
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("addAdminUser error:", err);
+    return { ok: false, message: "Server correction error" };
+  }
+}
+
+export async function addAdminBhajan(
+  title: string,
+  category: string,
+  lyrics: string,
+  secret: string
+): Promise<{ ok: boolean; message?: string }> {
+  try {
+    const res = await fetch(`${API}/admin/bhajans`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-secret": secret,
+      },
+      body: JSON.stringify({ title, category, lyrics }),
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("addAdminBhajan error:", err);
+    return { ok: false, message: "Server connection error" };
   }
 }
