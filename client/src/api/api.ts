@@ -1,7 +1,7 @@
 // client/src/api/api.ts
 // Handles authenticated requests using Firebase ID Tokens.
 
-const API = `${import.meta.env.VITE_API_URL}/api`;
+const API = `${import.meta.env.VITE_API_URL}`;
 
 let authToken: string | null = null;
 
